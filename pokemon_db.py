@@ -102,7 +102,7 @@ pokemon_db = {
 
   "Oddish": {"type": ["Grass", "Poison"], "tier": "1st_stage", "base_price": 50},
   "Gloom": {"type": ["Grass", "Poison"], "tier": "2nd_stage", "base_price": 200},
-  "Vileplume": {"type": ["Grass", "Poison"], "tier": "3rd_stage", "base_price": 450}
+  "Vileplume": {"type": ["Grass", "Poison"], "tier": "3rd_stage", "base_price": 450},
   "Paras": {"type": ["Bug", "Grass"], "tier": "1st_stage", "base_price": 50},
   "Parasect": {"type": ["Bug", "Grass"], "tier": "2nd_stage", "base_price": 200},
 
