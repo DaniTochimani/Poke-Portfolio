@@ -22,7 +22,7 @@ class Player:
         self.name = name
         self.poke_dollars = starting_balance
         self.inventory = []   # Each entry: {name, tier, purchase_price, day_bought}
-        self.current_day = 1 #what about currenr_price and add dividend_price
+        self.current_day = 1 # add dividend_price
 
     # ------------------------------------------------------------------
     # BUYING
