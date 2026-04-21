@@ -26,7 +26,8 @@ def prompt_choice(options: list[str]) -> str:
                 return "quit"
             if 1 <= idx <= len(options):
                 return options[idx - 1]
-        matches = [o for o in options if o.lower().startwith(raw.lower())]
+        matches = [o for o in options if o.lower().startswith(raw.lower())]
+
         if len(matches) == 1:
             return matches[0]
         print("Invalid choice - Try again.")
@@ -273,6 +274,7 @@ def main() -> None:
     market.view_market()
 
     while player.current_day <= TOTAL_DAYS:
+        
         print(f"\n{DIVIDER}")
         print(f"  Day {player.current_day} / {TOTAL_DAYS}   |   "
               f"Balance: {player.poke_dollars} PokéDollars   |   "
