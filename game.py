@@ -287,7 +287,7 @@ def main() -> None:
             "Buy Pokémon",
             "Sell Pokémon",
             "View portfolio",
-            f"Refresh market ({refreshes_left} left)",
+            f"Refresh Market ({refreshes_left} left)",
             "Advance day",
         ])
 
