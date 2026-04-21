@@ -304,8 +304,8 @@ def main() -> None:
             action_sell(player)
         elif choice == "View portfolio":
             player.view_portfolio()
-        elif choice == "Refresh market":
-            action_refresh(player)
+        elif choice.startswith("Refresh Market"):
+            action_refresh(player, refresh_counter)
         elif choice == "Advance day":
             if player.current_day == TOTAL_DAYS:
                 print(f"\n  This is the last day! Advancing ends the game.")
