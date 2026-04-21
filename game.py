@@ -244,12 +244,23 @@ def choose_starter(player: Player) -> None:
 def main() -> None:
     print_header("Welcome to PokéPortfolio!")
     print(f"""
+  In a world where Pokémon aren't just partners — they're assets.
 
+  Rare sightings drive prices up. New regulations crash entire types
+  overnight. A single viral clip can send Magikarp soaring.
+
+  You have {TOTAL_DAYS} days and {STARTING_BALANCE} PokéDollars to build a fortune.
+  Read the news. Time the market. Buy low, sell high.
+
+  Good luck, Trainer.
           """)
-    name = input("  Enter your trainer name: ").strip() or "Ash"
+    name = input("  Enter your trainer name: ").strip() or "IamABot"
 
     player = Player(name, starting_balance=STARTING_BALANCE)
 
+    choose_starter(player)
+
+    refresh_counter = [0]
     market.generate_daily_market(player.get_balance())
     print(f"\n  Good luck, {player.name}! You have {TOTAL_DAYS} days to build your fortune.")
     seed_opening_news()
