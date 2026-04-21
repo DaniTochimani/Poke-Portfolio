@@ -243,6 +243,9 @@ def choose_starter(player: Player) -> None:
 #Main Game
 def main() -> None:
     print_header("Welcome to PokéPortfolio!")
+    print(f"""
+
+          """)
     name = input("  Enter your trainer name: ").strip() or "Ash"
 
     player = Player(name, starting_balance=STARTING_BALANCE)
