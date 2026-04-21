@@ -116,10 +116,16 @@ def action_sell(player: Player) -> None:
     player.sell_pokemon(chosen["name"], sell_price)
 
 
-def action_refresh(player: Player) -> None:
-    """Manually refresh the market (free action, doesn't advance day)."""
+def action_refresh(player: Player, refresh_counter: list) -> None:
+    """Manually refresh the market. Limited to MAX_REFRESHES times per game."""
+    if refresh_counter[0] >= MAX_REFRESHES:
+        print(f"\n  You've used all {MAX_REFRESHES} market refreshes for this run.")
+        return
     market.refresh_market(player.get_balance())
-    print("\n  Market refreshed!")
+    news.apply_news_to_market(market.market_inventory)  # keep news multipliers applied
+    refresh_counter[0] += 1
+    remaining = MAX_REFRESHES - refresh_counter[0]
+    print(f"\n  Market refreshed! ({remaining} refresh{'es' if remaining != 1 else ''} remaining)")
     market.view_market()
 
 
