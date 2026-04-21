@@ -274,7 +274,7 @@ def main() -> None:
     market.view_market()
 
     while player.current_day <= TOTAL_DAYS:
-        
+        refreshes_left = MAX_REFRESHES - refresh_counter[0]
         print(f"\n{DIVIDER}")
         print(f"  Day {player.current_day} / {TOTAL_DAYS}   |   "
               f"Balance: {player.poke_dollars} PokéDollars   |   "
