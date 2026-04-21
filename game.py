@@ -5,6 +5,7 @@ from player import Player
 STARTING_BALANCE = 500
 TOTAL_DAYS = 10
 DIVIDER = "-" * 55
+MAX_REFRESHES = 3
 
 #Helpers
 def print_header(title: str) -> None:
@@ -191,6 +192,53 @@ def game_over(player: Player) -> None:
         rank = "📉 Better luck next time..."
 
     print(f"\n  Rank: {rank}\n")
+
+#Starter Selection
+def choose_starter(player: Player) -> None:
+    """
+    Present the three Kanto starters and gift the chosen one to the player.
+    Added directly to inventory at purchase_price 0 — it's a gift, not a purchase.
+    """
+    starters = {
+        "1": ("Bulbasaur",  "the calm, strategic choice — Grass/Poison type"),
+        "2": ("Charmander", "the bold, high-risk choice — Fire type"),
+        "3": ("Squirtle",   "the steady, defensive choice — Water type"),
+    }
+
+    print(f"\n{'─' * 55}")
+    print("  Professor Oak steps forward and clears his throat.\n")
+    print("  'The world of Pokémon trading is not so different")
+    print("   from the world of Pokémon training. You must read")
+    print("   the market, manage your risk, and above all —")
+    print("   trust your instincts.'\n")
+    print("  'Now then — every trainer needs a partner.")
+    print("   Choose your starter Pokémon.'\n")
+
+    for key, (name, desc) in starters.items():
+        print(f"    {key}.  {name} — {desc}")
+
+    while True:
+        raw = input("\n  > ").strip()
+        if raw in starters:
+            chosen_name, _ = starters[raw]
+            break
+        match = [k for k, (n, _) in starters.items() if n.lower().startswith(raw.lower())]
+        if len(match) == 1:
+            chosen_name, _ = starters[match[0]]
+            break
+        print("  Please enter 1, 2, or 3 (or type the Pokémon's name).")
+
+    from pokemon_db import pokemon_db
+    data = pokemon_db[chosen_name]
+    player.inventory.append({
+        "name":           chosen_name,
+        "tier":           data["tier"],
+        "type":           data["type"],
+        "purchase_price": 0,
+        "day_bought":     player.current_day,
+    })
+    print(f"\n  You chose {chosen_name}! It's been added to your portfolio.")
+    print("  (Starter Pokémon are gifted — purchase price recorded as 0.)\n")
 
 #Main Game
 def main() -> None:
