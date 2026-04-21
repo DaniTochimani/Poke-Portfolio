@@ -1,4 +1,5 @@
 import market
+import news
 from player import Player
 
 STARTING_BALANCE = 500
