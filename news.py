@@ -682,22 +682,21 @@ def apply_news_to_market(market_inventory):
 
 
 def display_news():
-    """
-    Prints all currently active news as paragraphs.
-    Shows days remaining; multipliers are never revealed to the player.
-    """
     if not active_news:
         print("\n[No current news.]")
         return
 
     print("\n===== TODAY'S POKEMON MARKET NEWS =====")
     for i, event in enumerate(active_news, 1):
-        if event["days_left"] <= 0:
-            tag = "ENDED"
-        elif event["days_left"] == 1:
+
+        if event["days_left"] == 1:
             tag = "FINAL DAY"
+        elif event["days_left"] == 2:
+            tag = "LAST STAGE"
         else:
             tag = f"ONGOING ({event['days_left']} days)"
+
         print(f"\n[{i}] {tag}")
         print(event["headline"])
+
     print("\n========================================")
