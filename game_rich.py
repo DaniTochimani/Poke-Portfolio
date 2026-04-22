@@ -378,7 +378,7 @@ def main() -> None:
     choose_starter(player)
 
     refresh_counter = [0]
-    market.initialize_prices()
+    market.generate_daily_market(player.get_balance())
     market.generate_daily_market(player.get_balance())
     console.print(f"\n  [bold green]Good luck, {player.name}![/bold green] [dim]{TOTAL_DAYS} days on the clock.[/dim]")
     seed_opening_news()
