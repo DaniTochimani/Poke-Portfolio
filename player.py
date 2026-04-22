@@ -1,6 +1,5 @@
 from pokemon_db import pokemon_db
 
-
 class Player:
     """
     Represents a player in PokéPortfolio.
@@ -109,12 +108,7 @@ class Player:
     # ------------------------------------------------------------------
 
     def view_portfolio(self):
-        """
-        Print a summary of the player's current holdings and unrealized P/L.
-
-        'Unrealized' means we haven't sold yet — it's what we'd make IF
-        we sold at current base price (market fluctuations not applied here).
-        """
+        import market
         print(f"\n=== {self.name}'s Portfolio  |  Day {self.current_day}  |  Balance: {self.poke_dollars} PokéDollars ===")
 
         if not self.inventory:
@@ -125,23 +119,26 @@ class Player:
         total_current_value = 0
 
         for p in self.inventory:
-            base_price = pokemon_db[p["name"]]["base_price"]
-            pnl = base_price - p["purchase_price"]
+            # ✅ FIX: use live market price, NOT pokemon_db base_price
+            current_price = market.live_prices.get(p["name"], 0)
+
+            pnl = current_price - p["purchase_price"]
             pnl_label = f"+{pnl}" if pnl >= 0 else str(pnl)
             types_str = "/".join(p["type"])
 
             print(f"  {p['name']} ({types_str}) [{p['tier']}]"
-                  f"  Bought: {p['purchase_price']} on Day {p['day_bought']}"
-                  f"  Base Value: {base_price}  P/L: {pnl_label}")
+                f"  Bought: {p['purchase_price']} on Day {p['day_bought']}"
+                f"  Current Value: {current_price}  P/L: {pnl_label}")
 
             total_invested += p["purchase_price"]
-            total_current_value += base_price
+            total_current_value += current_price
 
         total_pnl = total_current_value - total_invested
         total_pnl_label = f"+{total_pnl}" if total_pnl >= 0 else str(total_pnl)
+
         print(f"\n  Total Invested: {total_invested}  |  "
-              f"Portfolio Value: {total_current_value}  |  "
-              f"Net P/L: {total_pnl_label}")
+          f"Portfolio Value: {total_current_value}  |  "
+          f"Net P/L: {total_pnl_label}")
 
     def get_balance(self):
         """Return the player's current balance (useful for market.py calls)."""
