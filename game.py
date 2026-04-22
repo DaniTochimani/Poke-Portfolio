@@ -1,6 +1,5 @@
 import market
 import news
-import random
 from player import Player
 
 market.initialize_prices()
@@ -141,7 +140,7 @@ def action_advance_day(player: Player) -> None:
             first_sentence = h.split(".")[0] + "."
             print(f"    • [ENDED] {first_sentence}")
 
-    news.generate_new_events(n=1 if random.random() < 0.7 else 0)
+    news.generate_new_events(n=2)
 
     market.random_price_fluctuations()
 

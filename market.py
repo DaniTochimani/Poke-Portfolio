@@ -78,12 +78,7 @@ def generate_daily_market(player_balance):
         data = pokemon_db[name]
 
         # NEW: Use global live price instead of base price
-        price = live_prices[name]
-
-        # Apply type-based price modifiers
-        for mod in price_modifiers.values():
-            if any(t == mod['type'] for t in data['type']):
-                price = int(price * mod['modifier'])
+        price = base_prices[name]
 
         market_inventory.append({
             "name": name,
