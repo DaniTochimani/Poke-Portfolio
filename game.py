@@ -168,8 +168,8 @@ def game_over(player: Player) -> None:
     print_header(f"GAME OVER — Day {player.current_day}")
 
     portfolio_value = sum(
-        market.live_prices[p["name"]] for p in player.inventory
-    )
+    market.live_prices.get(p["name"], 0) for p in player.inventory
+)
     final_net_worth = player.poke_dollars + portfolio_value
 
     print(f"\n  Player        : {player.name}")
