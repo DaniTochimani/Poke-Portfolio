@@ -692,7 +692,12 @@ def display_news():
 
     print("\n===== TODAY'S POKEMON MARKET NEWS =====")
     for i, event in enumerate(active_news, 1):
-        tag = "BREAKING" if event["days_left"] == 1 else f"ONGOING ({event['days_left']} days)"
+        if event["days_left"] <= 0:
+            tag = "ENDED"
+        elif event["days_left"] == 1:
+            tag = "FINAL DAY"
+        else:
+            tag = f"ONGOING ({event['days_left']} days)"
         print(f"\n[{i}] {tag}")
         print(event["headline"])
     print("\n========================================")
