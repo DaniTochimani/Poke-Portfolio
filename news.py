@@ -639,23 +639,46 @@ def advance_news():
 
 def apply_news_to_market(market_inventory):
     """
-    Applies all active news multipliers to matching Pokémon in market_inventory in-place.
+    Applies all active news multipliers to matching Pokémon in live_prices.
     Multiple active events stack multiplicatively.
     """
+    import market  # needed to access live_prices
+
     for event in active_news:
         kind = event["target"]["kind"]
         value = event["target"]["value"]
         mult = event["multiplier"]
 
         for pokemon in market_inventory:
+
+            name = pokemon["name"]
+
+            if name not in market.live_prices:
+                continue
+
             if kind == "all":
-                pokemon["price"] = max(1, int(pokemon["price"] * mult))
+                market.live_prices[name] = max(
+                    1,
+                    int(market.live_prices[name] * mult)
+                )
+
             elif kind == "type" and value in pokemon["type"]:
-                pokemon["price"] = max(1, int(pokemon["price"] * mult))
+                market.live_prices[name] = max(
+                    1,
+                    int(market.live_prices[name] * mult)
+                )
+
             elif kind == "tier" and pokemon["tier"] == value:
-                pokemon["price"] = max(1, int(pokemon["price"] * mult))
+                market.live_prices[name] = max(
+                    1,
+                    int(market.live_prices[name] * mult)
+                )
+
             elif kind == "name" and pokemon["name"] == value:
-                pokemon["price"] = max(1, int(pokemon["price"] * mult))
+                market.live_prices[name] = max(
+                    1,
+                    int(market.live_prices[name] * mult)
+                )
 
 
 def display_news():
