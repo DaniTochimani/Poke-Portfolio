@@ -2,6 +2,8 @@ import market
 import news
 from player import Player
 
+market.initialize_prices()
+
 STARTING_BALANCE = 500
 TOTAL_DAYS = 10
 DIVIDER = "-" * 55
@@ -47,7 +49,7 @@ def action_buy(player: Player) -> None:
     for i, p in enumerate(market.market_inventory, 1):
         types_str = "/".join(p["type"])
         print(f"  {i}. {p['name']} ({types_str}) [{p['tier']}]"
-              f"  — {p['price']} PokéDollars  (Qty: {p['quantity']})")
+              f"  — {market.live_prices[p['name']]} PokéDollars  (Qty: {p['quantity']})")
     print("  0. Cancel")
 
     raw = input("\n  Pick a number: ").strip()
@@ -66,7 +68,7 @@ def action_buy(player: Player) -> None:
         print(f"  {chosen['name']} is sold out!")
         return
 
-    success = player.buy_pokemon(chosen["name"], chosen["price"])
+    success = player.buy_pokemon(chosen["name"], market.live_prices[chosen["name"]])
     if success:
         chosen["quantity"] -= 1
         if chosen["quantity"] == 0:
@@ -83,12 +85,7 @@ def action_sell(player: Player) -> None:
 
     print_header("Sell a Pokémon")
     for i, p in enumerate(owned, 1):
-        from pokemon_db import pokemon_db
-        current_price = pokemon_db[p["name"]]["base_price"]
-        for mp in market.market_inventory:
-            if mp["name"] == p["name"]:
-                current_price = mp["price"]
-                break
+        current_price = market.live_prices[p["name"]]
         types_str = "/".join(p["type"])
         pnl = current_price - p["purchase_price"]
         pnl_label = f"+{pnl}" if pnl >= 0 else str(pnl)
@@ -107,12 +104,7 @@ def action_sell(player: Player) -> None:
         return
 
     chosen = owned[idx]
-    from pokemon_db import pokemon_db
-    sell_price = pokemon_db[chosen["name"]]["base_price"]
-    for mp in market.market_inventory:
-        if mp["name"] == chosen["name"]:
-            sell_price = mp["price"]
-            break
+    sell_price = market.live_prices[chosen["name"]]
 
     player.sell_pokemon(chosen["name"], sell_price)
 
@@ -175,9 +167,8 @@ def game_over(player: Player) -> None:
 
     print_header(f"GAME OVER — Day {player.current_day}")
 
-    # Liquidate remaining portfolio at base prices
     portfolio_value = sum(
-        pokemon_db[p["name"]]["base_price"] for p in player.inventory
+        market.live_prices[p["name"]] for p in player.inventory
     )
     final_net_worth = player.poke_dollars + portfolio_value
 
@@ -186,7 +177,6 @@ def game_over(player: Player) -> None:
     print(f"  Portfolio     : {portfolio_value} PokéDollars")
     print(f"  ── NET WORTH  : {final_net_worth} PokéDollars ──")
 
-    # Simple rank
     if final_net_worth >= 2000:
         rank = "🏆 Pokémon Master Investor"
     elif final_net_worth >= 1200:
@@ -202,10 +192,6 @@ def game_over(player: Player) -> None:
 
 #Starter Selection
 def choose_starter(player: Player) -> None:
-    """
-    Present the three Kanto starters and gift the chosen one to the player.
-    Added directly to inventory at purchase_price 0 — it's a gift, not a purchase.
-    """
     starters = {
         "1": ("Bulbasaur",  "the calm, strategic choice — Grass/Poison type"),
         "2": ("Charmander", "the bold, high-risk choice — Fire type"),
@@ -318,4 +304,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
