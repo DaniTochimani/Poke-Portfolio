@@ -1,6 +1,15 @@
 import random
 from pokemon_db import pokemon_db
 
+base_prices = {}
+
+def initialize_prices():
+    global live_prices, base_prices
+
+    for name, data in pokemon_db.items():
+        base_prices[name] = data["base_price"]
+        live_prices[name] = data["base_price"]
+
 # ---------- Market Variables ----------
 market_inventory = []  # Pokémon currently available in the market
 market_day = 1         # Tracks the current market day
@@ -124,12 +133,9 @@ def view_market():
 
         print(f"{p['name']} ({types_str}) - {p['tier'].capitalize()} - Price: {price} - Qty: {p['quantity']} - Days Left: {p['days_left']}")
 
-# ---------- Optional: Simulate Market Price Fluctuation ----------
+
 def random_price_fluctuations():
-    """
-    Randomly increases or decreases Pokémon prices daily by 5-15%.
-    Makes the market feel more dynamic even without events.
-    """
     for name in live_prices:
-        fluctuation = random.uniform(0.85, 1.15)  # +/- 15%
-        live_prices[name] = max(1, int(live_prices[name] * fluctuation))
+        base = base_prices[name]
+        drift = random.uniform(0.90, 1.10)
+        live_prices[name] = max(1, int(base * drift))
