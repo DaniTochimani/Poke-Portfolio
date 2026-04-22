@@ -130,7 +130,8 @@ def show_portfolio(player: Player) -> None:
 
     total_invested, total_value = 0, 0
     for i, p in enumerate(player.inventory, 1):
-        cur = market.current_prices.get(p["name"], pokemon_db[p["name"]]["base_price"])
+        cur = next((mp["price"] for mp in market.market_inventory if mp["name"] == p["name"]),
+           pokemon_db[p["name"]]["base_price"])
         pnl = cur - p["purchase_price"]
         pnl_str = (f"[bold green]+₽{pnl:,}[/bold green]" if pnl > 0
                    else f"[bold red]₽{pnl:,}[/bold red]" if pnl < 0
@@ -250,7 +251,7 @@ def action_refresh(player: Player, refresh_counter: list) -> None:
         console.print(f"  [red]You've used all {MAX_REFRESHES} refreshes.[/red]")
         return
     market.refresh_market(player.get_balance())
-    news.apply_news_to_prices(market.current_prices)
+    news.apply_news_to_market(market.market_inventory)
     market.sync_market_prices()
     refresh_counter[0] += 1
     remaining = MAX_REFRESHES - refresh_counter[0]
@@ -265,7 +266,7 @@ def action_advance_day(player: Player) -> None:
         for h in expired:
             console.print(f"    [dim]• [ENDED] {h.split('.')[0]}.[/dim]")
     news.generate_new_events(n=2)
-    news.apply_news_to_prices(market.current_prices)
+    news.apply_news_to_market(market.market_inventory)
     market.advance_day()
     player.advance_day()
     market.random_price_fluctuations()
@@ -321,7 +322,7 @@ def choose_starter(player: Player) -> None:
 
 def seed_opening_news() -> None:
     news.generate_new_events(n=2)
-    news.apply_news_to_prices(market.current_prices)
+    news.apply_news_to_market(market.market_inventory)
     market.sync_market_prices()
     show_news()
 
