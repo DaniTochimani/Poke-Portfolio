@@ -27,7 +27,7 @@ def eligible_pokemon(player_balance):
     """
     eligible = []
     for name, data in pokemon_db.items():
-        base_price = data['base_price']
+        price = live_prices[name]
 
         if base_price > 8000:
             continue  # Skip ultra-expensive Pokémon
@@ -113,10 +113,6 @@ def view_market():
 
 # ---------- Optional: Simulate Market Price Fluctuation ----------
 def random_price_fluctuations():
-    """
-    Randomly increases or decreases Pokémon prices daily by 5-15%.
-    Makes the market feel more dynamic even without events.
-    """
-    for p in market_inventory:
-        fluctuation = random.uniform(0.85, 1.15)  # +/- 15%
-        p['price'] = max(1, int(p['price'] * fluctuation))  # Price cannot go below 1
+    for name in live_prices:
+        fluctuation = random.uniform(0.85, 1.15)
+        live_prices[name] = max(1, int(live_prices[name] * fluctuation))
