@@ -4,6 +4,11 @@ from pokemon_db import pokemon_db
 # ---------- Market Variables ----------
 market_inventory = []  # Pokémon currently available in the market
 market_day = 1         # Tracks the current market day
+live_prices = {}
+
+def initialize_prices():
+    for name, data in pokemon_db.items():
+        live_prices[name] = data["base_price"]
 
 # ---------- Price Modifiers (Events) ----------
 # These can be triggered based on game events or random occurrences
