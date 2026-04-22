@@ -78,7 +78,12 @@ def generate_daily_market(player_balance):
         data = pokemon_db[name]
 
         # NEW: Use global live price instead of base price
-        price = base_prices[name]
+        price = live_prices[name]
+
+        # Apply type-based price modifiers
+        for mod in price_modifiers.values():
+            if any(t == mod['type'] for t in data['type']):
+                price = int(price * mod['modifier'])
 
         market_inventory.append({
             "name": name,
@@ -128,9 +133,12 @@ def view_market():
 
         print(f"{p['name']} ({types_str}) - {p['tier'].capitalize()} - Price: {price} - Qty: {p['quantity']} - Days Left: {p['days_left']}")
 
-
+# ---------- Optional: Simulate Market Price Fluctuation ----------
 def random_price_fluctuations():
+    """
+    Randomly increases or decreases Pokémon prices daily by 5-15%.
+    Makes the market feel more dynamic even without events.
+    """
     for name in live_prices:
-        base = base_prices[name]
-        drift = random.uniform(0.90, 1.10)
-        live_prices[name] = max(1, int(base * drift))
+        fluctuation = random.uniform(0.85, 1.15)  # +/- 15%
+        live_prices[name] = max(1, int(live_prices[name] * fluctuation))
