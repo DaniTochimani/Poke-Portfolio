@@ -1,7 +1,6 @@
 import market
 import news
 from player import Player
-
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
