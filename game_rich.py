@@ -318,7 +318,18 @@ def action_advance_day(player):
     # Step 3: Random ±15% price drift BEFORE news is re-applied
     market.random_price_fluctuations()
 
-    # Step 4–6: Age market listings, advance counters, generate fresh listings
+    # Step 4: Collect dividends before advancing the day counter
+    payouts = player.collect_dividends()
+    if payouts:
+        total = sum(amt for _, amt in payouts)
+        lines = "  ".join(f"[bold]{name}[/bold] +{amt}" for name, amt in payouts)
+        console.print(Panel(
+            f"{lines}\n\n  [green]Total dividend income: +{total} PokéDollars[/green]",
+            title="[bold gold1]DAILY DIVIDENDS[/bold gold1]",
+            padding=(0, 2),
+        ))
+
+    # Step 5–6: Age market listings, advance counters, generate fresh listings
     market.advance_day()
     player.advance_day()
     market.generate_daily_market(player.get_balance())

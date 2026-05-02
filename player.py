@@ -1,4 +1,17 @@
+import random
 from pokemon_db import pokemon_db
+
+DIVIDEND_RATES = {
+    "baby":             (2,  5),
+    "1st_stage":        (3,  7),
+    "starter":          (5, 10),
+    "base":             (5, 12),
+    "2nd_stage":        (10, 22),
+    "3rd_stage":        (15, 30),
+    "pseudo_legendary": (22, 45),
+    "legendary":        (35, 65),
+    "mythical":         (55, 85),
+}
 
 class Player:
     """
@@ -94,6 +107,24 @@ class Player:
         print(f"Sold {pokemon_name} for {current_market_price} PokéDollars! "
               f"(P/L: {profit_label})  Balance: {self.poke_dollars}")
         return True
+
+    # ------------------------------------------------------------------
+    # DIVIDENDS
+    # ------------------------------------------------------------------
+
+    def collect_dividends(self):
+        """
+        Pay out daily dividends for each owned Pokémon based on its tier.
+        Returns a list of (name, amount) tuples for display.
+        """
+        payouts = []
+        for p in self.inventory:
+            tier = p["tier"]
+            lo, hi = DIVIDEND_RATES.get(tier, (2, 5))
+            amount = random.randint(lo, hi)
+            self.poke_dollars += amount
+            payouts.append((p["name"], amount))
+        return payouts
 
     # ------------------------------------------------------------------
     # DAY TRACKING
