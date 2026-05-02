@@ -4,8 +4,15 @@ A strategy-based terminal finance game where players manage a dynamic portfolio 
 
 ## How to Play
 
+**Plain terminal (no dependencies):**
 ```
 python game.py
+```
+
+**Rich UI — colored tables, panels, and type highlighting:**
+```
+pip install rich
+python game_rich.py
 ```
 
 Enter your trainer name, choose a starter Pokémon (gifted for free), then trade over 10 in-game days to maximize your net worth.
@@ -32,6 +39,22 @@ Prices fluctuate ±15% daily. Active news events apply additional multipliers on
 | ≥ 800 | Rising Trainer |
 | ≥ 500 | Broke Even |
 | < 500 | Better luck next time... |
+
+## Dividends
+
+Every Pokémon you hold pays a small daily dividend when the day advances. Higher-tier Pokémon pay more. Dividends are automatically added to your balance and displayed in the Rich UI variant.
+
+| Tier | Daily Payout Range |
+|------|--------------------|
+| Baby | 2–5 |
+| 1st stage | 3–7 |
+| Starter | 5–10 |
+| Base (single-stage) | 5–12 |
+| 2nd stage | 10–22 |
+| 3rd stage | 15–30 |
+| Pseudo-legendary | 22–45 |
+| Legendary | 35–65 |
+| Mythical | 55–85 |
 
 ## Market
 
@@ -73,11 +96,11 @@ AI — Used as a development aid throughout the project. Assisted with debugging
 
 ```
 Poke-Portfolio/
- ├─ game.py         # Main game loop, all player actions, game-over screen
- ├─ game_rich.py    # (WIP) Rich terminal UI variant
- ├─ market.py       # Market generation, price tracking, daily fluctuations
- ├─ news.py         # News event pool, activation, and price multiplier application
- ├─ player.py       # Player state: balance, inventory, buy/sell/portfolio view
- ├─ pokemon_db.py   # Full Pokémon database with types, tiers, and base prices
- └─ sample.py       # Scratch/testing file
+ ├─ game.py          # Main game loop — plain terminal UI
+ ├─ game_rich.py     # Rich terminal UI — colored tables, panels, dividend display
+ ├─ market.py        # Market generation, live price tracking, daily fluctuations
+ ├─ news.py          # News event pool, activation, aging, and price multiplier application
+ ├─ player.py        # Player state: balance, inventory, buy/sell, dividends, portfolio view
+ ├─ pokemon_db.py    # Full Pokémon database with types, tiers, and base prices
+ └─ sample.py        # Scratch/testing file
 ```
