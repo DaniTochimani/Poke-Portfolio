@@ -12,7 +12,7 @@ console = Console()
 market.initialize_prices()
 
 STARTING_BALANCE = 500
-TOTAL_DAYS = 10
+TOTAL_DAYS = 15
 MAX_REFRESHES = 3
 
 # ─────────────────────────────────────────────
@@ -55,7 +55,7 @@ def intro_screen():
     console.print(Panel(
         "[white]In a world where Pokémon aren't just partners — they're assets.\n\n"
         "Rare sightings drive prices up. News crashes markets. Timing is everything.\n\n"
-        "You have 10 days and 500 PokéDollars to build your fortune.\n"
+        "You have 15 days and 500 PokéDollars to build your fortune.\n"
         "Buy low. Sell high. Read the market.[/white]",
         title="[bold cyan]POKÉPORTFOLIO[/bold cyan]",
         style="black",
@@ -127,14 +127,19 @@ def show_market():
     for i, p in enumerate(market.market_inventory, 1):
         types = " / ".join(type_tag(t) for t in p["type"])
         price = market.live_prices[p["name"]]
-        lo, hi = DIVIDEND_RATES.get(p["tier"], (2, 5))
+        rates = DIVIDEND_RATES.get(p["tier"])
+        if rates:
+            lo, hi = rates
+            dividend_str = f"{lo}–{hi}"
+        else:
+            dividend_str = "None"
         table.add_row(
             str(i),
             p["name"],
             types,
             p["tier"],
             str(price),
-            f"{lo}–{hi}",
+            dividend_str,
             str(p["quantity"]),
             f"in {p['days_left']}d",
         )
