@@ -2,15 +2,12 @@ import random
 from pokemon_db import pokemon_db
 
 DIVIDEND_RATES = {
-    "baby":             (2,  5),
-    "1st_stage":        (3,  7),
-    "starter":          (5, 10),
-    "base":             (5, 12),
-    "2nd_stage":        (10, 22),
-    "3rd_stage":        (15, 30),
-    "pseudo_legendary": (22, 45),
-    "legendary":        (35, 65),
-    "mythical":         (55, 85),
+    "starter":          (2,  4),
+    "2nd_stage":        (4,  9),
+    "3rd_stage":        (6,  13),
+    "pseudo_legendary": (10, 20),
+    "legendary":        (15, 28),
+    "mythical":         (22, 38),
 }
 
 class Player:
@@ -116,12 +113,16 @@ class Player:
     def collect_dividends(self):
         """
         Pay out daily dividends for each owned Pokémon based on its tier.
+        Tiers not in DIVIDEND_RATES (baby, 1st_stage, base) earn nothing.
         Returns a list of (name, amount) tuples for display.
         """
         payouts = []
         for p in self.inventory:
             tier = p["tier"]
-            lo, hi = DIVIDEND_RATES.get(tier, (2, 5))
+            rates = DIVIDEND_RATES.get(tier)
+            if rates is None:   # baby, 1st_stage, base → no dividend
+                continue
+            lo, hi = rates
             amount = random.randint(lo, hi)
             self.poke_dollars += amount
             self.total_dividends_earned += amount
@@ -152,7 +153,6 @@ class Player:
         total_current_value = 0
 
         for p in self.inventory:
-            # ✅ FIX: use live market price, NOT pokemon_db base_price
             current_price = market.live_prices.get(p["name"], 0)
 
             pnl = current_price - p["purchase_price"]
