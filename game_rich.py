@@ -1,7 +1,7 @@
 import random
 import market
 import news
-from player import Player
+from player import Player, DIVIDEND_RATES
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
@@ -120,18 +120,21 @@ def show_market():
     table.add_column("Type")
     table.add_column("Tier")
     table.add_column("Price", justify="right", style="green")
+    table.add_column("Dividend/day", justify="right", style="gold1")
     table.add_column("Qty", justify="right")
     table.add_column("Expires", justify="right", style="dim")
 
     for i, p in enumerate(market.market_inventory, 1):
         types = " / ".join(type_tag(t) for t in p["type"])
         price = market.live_prices[p["name"]]
+        lo, hi = DIVIDEND_RATES.get(p["tier"], (2, 5))
         table.add_row(
             str(i),
             p["name"],
             types,
             p["tier"],
             str(price),
+            f"{lo}–{hi}",
             str(p["quantity"]),
             f"in {p['days_left']}d",
         )
@@ -190,7 +193,8 @@ def show_portfolio(player):
     console.print(
         f"  Invested: [bold]{total_invested}[/bold]  "
         f"Portfolio Value: [green]{total_value}[/green]  "
-        f"Net P/L: [{total_pnl_color}]{total_pnl_str}[/{total_pnl_color}]"
+        f"Net P/L: [{total_pnl_color}]{total_pnl_str}[/{total_pnl_color}]  "
+        f"Total Dividends: [gold1]{player.total_dividends_earned}[/gold1]"
     )
 
 
@@ -426,6 +430,7 @@ def game_over(player):
     summary.add_row("Player", player.name)
     summary.add_row("Cash Balance", f"[green]{player.poke_dollars}[/green] PokéDollars")
     summary.add_row("Portfolio Value", f"[green]{portfolio_value}[/green] PokéDollars")
+    summary.add_row("Total Dividends Earned", f"[gold1]{player.total_dividends_earned}[/gold1] PokéDollars")
     summary.add_row("NET WORTH", f"[yellow]{final_net_worth}[/yellow] PokéDollars")
     summary.add_row("Rank", rank)
 

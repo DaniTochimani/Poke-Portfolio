@@ -34,7 +34,8 @@ class Player:
         self.name = name
         self.poke_dollars = starting_balance
         self.inventory = []   # Each entry: {name, tier, purchase_price, day_bought}
-        self.current_day = 1 # add dividend_price
+        self.current_day = 1
+        self.total_dividends_earned = 0
 
     # ------------------------------------------------------------------
     # BUYING
@@ -123,6 +124,7 @@ class Player:
             lo, hi = DIVIDEND_RATES.get(tier, (2, 5))
             amount = random.randint(lo, hi)
             self.poke_dollars += amount
+            self.total_dividends_earned += amount
             payouts.append((p["name"], amount))
         return payouts
 

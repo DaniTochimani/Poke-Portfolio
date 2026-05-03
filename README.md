@@ -42,7 +42,7 @@ Prices fluctuate ±15% daily. Active news events apply additional multipliers on
 
 ## Dividends
 
-Every Pokémon you hold pays a small daily dividend when the day advances. Higher-tier Pokémon pay more. Dividends are automatically added to your balance and displayed in the Rich UI variant.
+Every Pokémon you hold pays a small daily dividend when the day advances. Higher-tier Pokémon pay more. Dividends are automatically added to your balance and displayed in the Rich UI variant. The market table shows the dividend range for each listing so you can factor passive income into buying decisions. Your cumulative **Total Dividends Earned** is shown in the portfolio footer and the end-of-game summary.
 
 | Tier | Daily Payout Range |
 |------|--------------------|
@@ -58,6 +58,7 @@ Every Pokémon you hold pays a small daily dividend when the day advances. Highe
 
 ## Market
 
+- Each listing shows its **Dividend/day** range so you can compare passive income potential at a glance
 - 3–6 Pokémon appear daily; each listing expires after 2 days
 - Rare/legendary Pokémon only appear once your balance reaches 300+ PokéDollars
 - Prices cap at 8,000 PokéDollars (ultra-expensive Pokémon excluded)
